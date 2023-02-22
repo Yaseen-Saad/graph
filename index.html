@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Graphing Program</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <script>
+      // create empty arrays to store x and y coordinates
+      var x1_values = [];
+      var y1_values = [];
+      var x2_values = [];
+      var y2_values = [];
+
+      // function to plot the lines
+      function plot() {
+        var trace1 = {
+          x: x1_values,
+          y: y1_values,
+          mode: "lines",
+          name: "Line 1",
+        };
+
+        var trace2 = {
+          x: x2_values,
+          y: y2_values,
+          mode: "lines",
+          name: "Line 2",
+        };
+
+        var data = [];
+        if (x1_values.length > 0 && y1_values.length > 0) {
+          data.push(trace1);
+        }
+        if (x2_values.length > 0 && y2_values.length > 0) {
+          data.push(trace2);
+        }
+
+        var layout = {
+          xaxis: {
+            title: "X",
+          },
+          yaxis: {
+            title: "Y",
+          },
+        };
+
+        Plotly.newPlot("plot", data, layout);
+      }
+
+      // function to handle form submission
+      function onSubmit() {
+        // get form inputs
+        var x_value = parseFloat(document.getElementById("x-value").value);
+        var y_value = parseFloat(document.getElementById("y-value").value);
+        var line_number = parseInt(
+          document.getElementById("line-number").value
+        );
+
+        // add coordinates to appropriate array
+        if (line_number === 1) {
+          x1_values.push(x_value);
+          y1_values.push(y_value);
+        } else if (line_number === 2) {
+          x2_values.push(x_value);
+          y2_values.push(y_value);
+        }
+
+        // clear form inputs
+        document.getElementById("x-value").value = "";
+        document.getElementById("y-value").value = "";
+
+        // plot the lines
+        plot();
+      }
+    </script>
+
+    <form onsubmit="event.preventDefault(); onSubmit();">
+      <label for="x-value">X value:</label>
+      <input type="number" id="x-value" required />
+      <label for="y-value">Y value:</label>
+      <input type="number" id="y-value" required />
+      <label for="line-number">Line number:</label>
+      <select id="line-number">
+        <option value="1">Line 1</option>
+        <option value="2">Line 2</option>
+      </select>
+      <button type="submit">Add point</button>
+    </form>
+    <div id="plot"></div>
+  </body>
+</html>
